@@ -18,4 +18,9 @@ public class AventureiroCriarReqDTO {
     @Min(value = 1, message = "nivel deve ser maior ou igual a 1")
     private Integer nivel;
 
+    @NotNull
+    private Long organizacaoId;
+
+    @NotNull
+    private Long usuarioResponsavelId;
 }

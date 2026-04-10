@@ -2,6 +2,8 @@ package br.com.caioogdev.modules.aventureiro.dto;
 
 import br.com.caioogdev.modules.aventureiro.models.Aventureiro;
 import br.com.caioogdev.shared.enums.Classe;
+import br.com.caioogdev.shared.enums.NivelPerigo;
+import br.com.caioogdev.shared.enums.StatusMissao;
 import lombok.Data;
 
 @Data
@@ -13,12 +15,22 @@ public class AventureiroDetalheRep {
     private Integer nivel;
     private Boolean ativo;
     private CompanheiroDetalhe companheiro;
+    private Long totalMissoes;
+    private UltimaMissaoDetalhe ultimaMissao;
 
     @Data
     public static class CompanheiroDetalhe {
         private String nome;
         private String especie;
         private Integer lealdade;
+    }
+
+    @Data
+    public static class UltimaMissaoDetalhe {
+        private Long id;
+        private String titulo;
+        private StatusMissao status;
+        private NivelPerigo nivelPerigo;
     }
 
     public static AventureiroDetalheRep from(Aventureiro aventureiro) {

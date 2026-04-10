@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,20 +42,31 @@ public class AventureiroController {
             @RequestParam(required = false) Classe classe,
             @RequestParam(required = false) Boolean ativo,
             @RequestParam(required = false) Integer nivelMinimo,
+            @RequestParam(required = false) String ordenarPor,
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "page não pode ser negativo") int page,
             @RequestParam(defaultValue = "10") @Min(value = 1, message = "size deve estar entre 1 e 50") @Max(value = 50, message = "size deve estar entre 1 e 50") int size) {
 
-        List<AventureiroResumoRep> aventureiros = service.listar(classe, ativo, nivelMinimo, page, size);
-        long total = service.contarComFiltros(classe, ativo, nivelMinimo);
-        int totalPages = (int) Math.ceil((double) total / size);
+        Page<AventureiroResumoRep> resultado = service.listar(classe, ativo, nivelMinimo, page, size, ordenarPor);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("X-Total-Count", String.valueOf(total));
+        headers.add("X-Total-Count", String.valueOf(resultado.getTotalElements()));
         headers.add("X-Page", String.valueOf(page));
         headers.add("X-Size", String.valueOf(size));
-        headers.add("X-Total-Pages", String.valueOf(totalPages));
+        headers.add("X-Total-Pages", String.valueOf(resultado.getTotalPages()));
 
-        return ResponseEntity.ok().headers(headers).body(aventureiros);
+        return ResponseEntity.ok().headers(headers).body(resultado.getContent());
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<AventureiroResumoRep>> buscarPorNome(
+            @RequestParam String nome,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<AventureiroResumoRep> resultado = service.buscarPorNome(nome, page, size);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Total-Count", String.valueOf(resultado.getTotalElements()));
+        return ResponseEntity.ok().headers(headers).body(resultado.getContent());
     }
 
     @GetMapping("/{id}")
