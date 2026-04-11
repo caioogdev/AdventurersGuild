@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: leogloriainfnet/postgres-tp2-spring:2.0-mac
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    command: >
+      bash -c "docker-entrypoint.sh postgres &
+               sleep 5 &&
+               psql -U postgres -c \"ALTER USER postgres WITH PASSWORD 'postgres';\" &&
+               wait"
+
+  elasticsearch:
+    image: leogloriainfnet/elastic-tp2-spring:1.0-mac
+    ports:
+      - "9200:9200"
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
