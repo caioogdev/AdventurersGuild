@@ -13,7 +13,7 @@ Sistema de Gestão de Aventureiros — TP2 Spring Boot
 **Mac:**
 ```bash
 docker run -d --name postgres-tp2 -e POSTGRES_PASSWORD=postgres -p 5432:5432 leogloriainfnet/postgres-tp2-spring:2.0-mac
-
+```
 ENDPOINT:
 
 Organizações
