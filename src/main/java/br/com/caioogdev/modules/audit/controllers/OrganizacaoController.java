@@ -1,8 +1,11 @@
 package br.com.caioogdev.modules.audit.controllers;
 
+import br.com.caioogdev.modules.audit.dto.OrganizacaoResumoRep;
 import br.com.caioogdev.modules.audit.models.Organizacao;
 import br.com.caioogdev.modules.audit.repositories.OrganizacaoRepository;
+import br.com.caioogdev.modules.audit.services.OrganizacaoService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +16,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrganizacaoController {
 
-    private final OrganizacaoRepository organizacaoRepository;
+    private final OrganizacaoService organizacaoService;
 
     @GetMapping
-    public List<Organizacao> listar() {
-        return organizacaoRepository.findAll();
+    public ResponseEntity<List<OrganizacaoResumoRep>> listar() {
+        return ResponseEntity.ok(organizacaoService.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Organizacao> buscarPorId(@PathVariable Long id) {
-        return organizacaoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<OrganizacaoResumoRep> buscarPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(organizacaoService.buscardPorId(id));
     }
 }

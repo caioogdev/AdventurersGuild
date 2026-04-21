@@ -29,18 +29,12 @@ public class Organizacao {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "organizacao", fetch = FetchType.LAZY)
     private List<Usuario> usuarios;
 
-    @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "organizacao", fetch = FetchType.LAZY)
     private List<Role> roles;
 
-    @JsonIgnore
-    @ToString.Exclude
     @OneToMany(mappedBy = "organizacao", fetch = FetchType.LAZY)
     private List<ApiKey> apiKeys;
 }

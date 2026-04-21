@@ -3,6 +3,7 @@ package br.com.caioogdev.modules.audit.controllers;
 import br.com.caioogdev.modules.audit.dto.UsuarioDetalheRep;
 import br.com.caioogdev.modules.audit.dto.UsuarioResumoRep;
 import br.com.caioogdev.modules.audit.repositories.UsuarioRepository;
+import br.com.caioogdev.modules.audit.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,37 +16,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
+    private final UsuarioService usuarioService;
 
     @GetMapping
-    public List<UsuarioResumoRep> listar() {
-        return usuarioRepository.findAll()
-                .stream()
-                .map(UsuarioResumoRep::from)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<UsuarioResumoRep>> listar() {
+        return ResponseEntity.ok(usuarioService.listar());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UsuarioResumoRep> buscarPorId(@PathVariable Long id) {
-        return usuarioRepository.findById(id)
-                .map(UsuarioResumoRep::from)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(usuarioService.buscarPorId(id));
     }
 
     @GetMapping("/{id}/completo")
     public ResponseEntity<UsuarioDetalheRep> buscarComRolesEPermissions(@PathVariable Long id) {
-        return usuarioRepository.findByIdComRolesEPermissions(id)
-                .map(UsuarioDetalheRep::from)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(usuarioService.buscarComRolesEPermissions(id));
     }
 
     @GetMapping("/organizacao/{orgId}")
-    public List<UsuarioResumoRep> listarPorOrganizacao(@PathVariable Long orgId) {
-        return usuarioRepository.findAllByOrganizacaoId(orgId)
-                .stream()
-                .map(UsuarioResumoRep::from)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<UsuarioResumoRep>> listarPorOrganizacao(@PathVariable Long orgId) {
+        return ResponseEntity.ok(usuarioService.listarPorOrganizacao(orgId));
     }
 }
